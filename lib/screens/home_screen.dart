@@ -1,441 +1,384 @@
+// lib/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  final String nome;
+  final bool initialZerado; // passe true/false aqui na inicialização
+
+  const HomeScreen({
+    super.key,
+    this.nome = 'João',
+    this.initialZerado = true,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final w = constraints.maxWidth;
-        final h = constraints.maxHeight;
-        final isTablet = w > 600;
-
-        // paddings adaptativos
-        final horizontal = isTablet ? w * 0.13 : 18.0;
-        final blockPadding = isTablet ? w * 0.03 : 10.0;
-        final vertPad = isTablet ? 32.0 : 18.0;
-        final fontScale = isTablet ? 1.22 : 1.0;
-
-        return Scaffold(
-          backgroundColor: Colors.white,
-          body: SafeArea(
-            child: Stack(
-              children: [
-                SingleChildScrollView(
-                  padding: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: isTablet ? 44 : 24),
-                  child: Column(
-                    children: [
-                      // Header + Olá
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: horizontal, vertical: vertPad / 2),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'EDUQUIZ',
-                              style: GoogleFonts.poppins(
-                                color: Color(0xFF4B2676),
-                                fontWeight: FontWeight.w800,
-                                fontSize: 20 * fontScale,
-                                letterSpacing: 1.2,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.notifications_none_rounded, color: Color(0xFF4B2676), size: 24 * fontScale),
-                                SizedBox(width: 14 * fontScale),
-                                Icon(Icons.settings_outlined, color: Color(0xFF4B2676), size: 24 * fontScale),
-                                SizedBox(width: 14 * fontScale),
-                                CircleAvatar(
-                                  radius: isTablet ? 25 : 18,
-                                  backgroundColor: Color(0xFFF0EBF8),
-                                  child: Icon(Icons.person_outline, color: Color(0xFF4B2676), size: 23 * fontScale),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: vertPad/3),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: horizontal),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Olá, João! 👋", style: GoogleFonts.poppins(fontSize: 16 * fontScale, fontWeight: FontWeight.w600, color: Color(0xFF433B4A))),
-                            SizedBox(height: 3),
-                            Text("Pronto para mais uma sessão de estudos?", style: GoogleFonts.poppins(fontSize: 13 * fontScale, color: Color(0xFFA498B5))),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: isTablet ? 20 : 14),
-                      // Cards superiores em Row/tablet grid
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: horizontal),
-                        child: isTablet
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(child: _InfoCard(fontScale: fontScale, color: Color(0xFFFDC250), value: '0%', label: 'dias consecutivos', icon: Icons.calendar_today_outlined)),
-                                  SizedBox(width: blockPadding),
-                                  Expanded(child: _InfoCard(fontScale: fontScale, color: Color(0xFF51B5A6), value: '7', label: 'dias consecutivos', icon: Icons.calendar_today_outlined)),
-                                  SizedBox(width: blockPadding),
-                                  Expanded(child: _InfoCard(fontScale: fontScale, color: Color(0xFF6EBF69), value: '80%', label: 'do curso', icon: Icons.school_outlined)),
-                                ],
-                              )
-                            : Row(
-                                children: [
-                                  Expanded(child: _InfoCard(fontScale: fontScale, color: Color(0xFFFDC250), value: '0%', label: 'dias consecutivos', icon: Icons.calendar_today_outlined)),
-                                  SizedBox(width: 10),
-                                  Expanded(child: _InfoCard(fontScale: fontScale, color: Color(0xFF51B5A6), value: '7', label: 'dias consecutivos', icon: Icons.calendar_today_outlined)),
-                                  SizedBox(width: 10),
-                                  Expanded(child: _InfoCard(fontScale: fontScale, color: Color(0xFF6EBF69), value: '80%', label: 'do curso', icon: Icons.school_outlined)),
-                                ],
-                              ),
-                      ),
-                      SizedBox(height: isTablet ? 30 : 18),
-                      // Mapa de Aprendizado
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: horizontal),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Mapa de aprendizado',
-                                  style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 15 * fontScale, color: Color(0xFF433B4A)),
-                                ),
-                                Text('Matemática · ENEM', style: GoogleFonts.poppins(fontSize: 12 * fontScale, color: Color(0xFFA498B5))),
-                              ],
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: Text('Ver mapa completo', style: GoogleFonts.poppins(fontSize: 12 * fontScale, color: Color(0xFF4B2676), fontWeight: FontWeight.bold)),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: isTablet ? 14 : 10),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: horizontal),
-                        child: _LearningPathBlock(fontScale: fontScale, isTablet: isTablet),
-                      ),
-                      SizedBox(height: isTablet ? 16 : 8),
-                      // Ações rápidas e estatísticas - grid no tablet
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: horizontal),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: vertPad),
-                            Text('Ações rápidas', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 15 * fontScale, color: Color(0xFF433B4A))),
-                            SizedBox(height: 10),
-                            _QuickActionsBlock(fontScale: fontScale, isTablet: isTablet),
-                            SizedBox(height: isTablet ? 30 : 22),
-                            Text('Estatísticas de hoje', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 15 * fontScale, color: Color(0xFF433B4A))),
-                            SizedBox(height: 10),
-                            _StatsBlock(fontScale: fontScale, isTablet: isTablet),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: isTablet ? 54 : 0),
-                    ],
-                  ),
-                ),
-                if (!isTablet)
-                  Positioned(left: 0, top: h * 0.24, child: _SideNavigation(fontScale: fontScale)),
-                Positioned(left: 0, right: 0, bottom: 0, child: _BottomBar(fontScale: fontScale, isTablet: isTablet)),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _InfoCard extends StatelessWidget {
-  final Color color;
-  final String value;
-  final String label;
-  final IconData icon;
-  final double fontScale;
-  const _InfoCard({required this.color, required this.value, required this.label, required this.icon, required this.fontScale});
+class _HomeScreenState extends State<HomeScreen> {
+  late bool isZerado;
+
+  @override
+  void initState() {
+    super.initState();
+    isZerado = widget.initialZerado;
+    // Aqui você pode chamar sua API e alterar isZerado quando receber resposta.
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 68 * fontScale,
-      padding: EdgeInsets.all(13 * fontScale),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(10 * fontScale),
+    // cores centrais do projeto
+    const Color primary = Color(0xFF6A1B9A);
+    const Color accent = Color(0xFFFFB300);
+    const bgColor = Color(0xFFF8F9FA);
+
+    return Scaffold(
+      backgroundColor: bgColor,
+      // AppBar transparente com avatar no canto direito (visual igual ao Figma)
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text('EDUQUIZ',
+            style: GoogleFonts.poppins(
+                color: primary, fontWeight: FontWeight.w700)),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.notifications_none, color: Colors.grey),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: InkWell(
+              onTap: () {
+                // por enquanto visual; depois -> Navigator.pushNamed(context,'/profile')
+              },
+              child: const CircleAvatar(
+                radius: 18,
+                backgroundColor: Color(0xFFE0E0E0),
+                child: Icon(Icons.person, color: Color(0xFF666666)),
+              ),
+            ),
+          ),
+        ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+
+      // Conteúdo rolável: cada bloco ocupa seu espaço e aparece ao rolar
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // HEADER CARD roxo (greeting + resumo curto)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: primary,
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.06),
+                    blurRadius: 10,
+                    offset: const Offset(0, 6),
+                  )
+                ],
+              ),
+              child: Row(
+                children: [
+                  // texto de saudação
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Olá, ${widget.nome} 👋',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          isZerado
+                              ? 'Vamos começar sua primeira aula?'
+                              : 'Continue sua jornada de aprendizado',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white70,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // botão para simular troca de estado (apenas para teste)
+                  IconButton(
+                    onPressed: () => setState(() => isZerado = !isZerado),
+                    icon: const Icon(Icons.sync, color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 18),
+
+            // CARD ROW: dias / taxa de acertos (visual igual ao Figma)
+            Row(
+              children: [
+                Expanded(child: _smallStatCard('Dias', isZerado ? '0' : '9', accent)),
+                const SizedBox(width: 12),
+                Expanded(child: _smallStatCard('Acertos', isZerado ? '0%' : '60%', Colors.green)),
+              ],
+            ),
+
+            const SizedBox(height: 20),
+
+            // Título Mapa de Aprendizado
+            Text('Mapa de aprendizado',
+                style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 10),
+
+            // MAPA: se zerado mostra imagem/texto, se não zerado mostra lista de cards
+            isZerado ? _mapaZeradoView() : _mapaNaoZeradoView(),
+
+            const SizedBox(height: 22),
+
+            // Ações rápidas (três botões grandes empilhados)
+            Text('Ações rápidas',
+                style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 12),
+            _actionCard(
+              title: 'Revisão diária',
+              subtitle: 'Reforce o conteúdo estudado',
+              bg: Colors.white,
+              borderColor: primary,
+              buttonLabel: 'INICIAR',
+              icon: Icons.bolt,
+              buttonBg: primary,
+              buttonTextColor: Colors.white,
+            ),
+            const SizedBox(height: 12),
+            _actionCard(
+              title: 'Banco de questões',
+              subtitle: 'Pratique com perguntas reais',
+              bg: primary,
+              borderColor: primary,
+              buttonLabel: 'CONTINUAR',
+              icon: Icons.question_answer_outlined,
+              buttonBg: Colors.white,
+              buttonTextColor: primary,
+              textColor: Colors.white,
+            ),
+            const SizedBox(height: 12),
+            _actionCard(
+              title: 'Trilha de matemática',
+              subtitle: 'Tópicos mais desafiadores',
+              bg: accent,
+              borderColor: accent,
+              buttonLabel: 'REFAZER',
+              icon: Icons.calculate_outlined,
+              buttonBg: Colors.black,
+              buttonTextColor: Colors.white,
+            ),
+
+            const SizedBox(height: 22),
+
+            // Estatísticas de hoje — grid 2x2
+            Text('Estatísticas de hoje',
+                style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(child: _statCard('Questões', isZerado ? '0' : '12', Icons.help_outline)),
+                const SizedBox(width: 12),
+                Expanded(child: _statCard('Tempo', isZerado ? '0m' : '18m', Icons.access_time)),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(child: _statCard('Acertos', isZerado ? '0%' : '75%', Icons.check_circle_outline)),
+                const SizedBox(width: 12),
+                Expanded(child: _statCard('Dias ativos', isZerado ? '0' : '6', Icons.calendar_today)),
+              ],
+            ),
+
+            const SizedBox(height: 36),
+          ],
+        ),
+      ),
+
+      // bottom bar com notch + FAB central (visual igual ao design)
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: primary,
+        onPressed: () {
+          // ação do + (por enquanto visual)
+        },
+        child: const Icon(Icons.play_arrow, size: 28, color: Colors.white),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        elevation: 9,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(icon, color: Colors.white, size: 15 * fontScale),
-              SizedBox(width: 6 * fontScale),
-              Text(value, style: GoogleFonts.poppins(color: Colors.white, fontSize: 17 * fontScale, fontWeight: FontWeight.w700)),
+              IconButton(onPressed: () {}, icon: Icon(Icons.home, color: primary)),
+              IconButton(onPressed: () {}, icon: Icon(Icons.map_outlined, color: Colors.grey[600])),
+              const SizedBox(width: 48), // espaço para FAB
+              IconButton(onPressed: () {}, icon: Icon(Icons.bar_chart, color: Colors.grey[600])),
+              IconButton(onPressed: () {}, icon: Icon(Icons.settings, color: Colors.grey[600])),
             ],
           ),
-          SizedBox(height: 6 * fontScale),
-          Text(label, style: GoogleFonts.poppins(color: Colors.white.withOpacity(0.9), fontSize: 11 * fontScale, fontWeight: FontWeight.w400)),
-        ],
-      ),
-    );
-  }
-}
-
-class _LearningPathBlock extends StatelessWidget {
-  final double fontScale;
-  final bool isTablet;
-  const _LearningPathBlock({required this.fontScale, required this.isTablet});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Color(0xFFF3F2F7),
-        borderRadius: BorderRadius.circular(15 * fontScale),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _LearningItem(title: 'Habilidade', subtitle: '3/7 módulos', status: 'EM ANDAMENTO', fontScale: fontScale),
-          Divider(indent: 22 * fontScale, endIndent: 22 * fontScale, color: Color(0xFFE2DEEB), thickness: 1),
-          _LearningItem(title: 'Matemática', subtitle: '5/9 módulos', status: 'CONCLUÍDO', labelColor: Color(0xFF6EBF69), fontScale: fontScale),
-          Divider(indent: 22 * fontScale, endIndent: 22 * fontScale, color: Color(0xFFE2DEEB), thickness: 1),
-          _LearningItem(title: 'História', subtitle: '1/5 módulos', status: 'NÃO INICIADO', labelColor: Color(0xFFFDC250), fontScale: fontScale),
-        ],
-      ),
-    );
-  }
-}
-
-class _LearningItem extends StatelessWidget {
-  final String title, subtitle, status;
-  final Color? labelColor;
-  final double fontScale;
-  const _LearningItem({required this.title, required this.subtitle, required this.status, this.labelColor, required this.fontScale});
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 8 * fontScale),
-      minLeadingWidth: 30 * fontScale,
-      title: Text(title, style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: Color(0xFF433B4A), fontSize: 14 * fontScale)),
-      subtitle: Text(subtitle, style: GoogleFonts.poppins(fontSize: 11 * fontScale, color: Color(0xFFA498B5))),
-      trailing: Container(
-        padding: EdgeInsets.symmetric(horizontal: 13 * fontScale, vertical: 5 * fontScale),
-        decoration: BoxDecoration(
-          color: (labelColor ?? Color(0xFFB2B2B2)).withOpacity(0.12),
-          borderRadius: BorderRadius.circular(11 * fontScale),
-        ),
-        child: Text(
-          status,
-          style: GoogleFonts.poppins(color: labelColor ?? Color(0xFFB2B2B2), fontWeight: FontWeight.bold, fontSize: 10 * fontScale),
         ),
       ),
     );
   }
-}
 
-class _QuickActionsBlock extends StatelessWidget {
-  final double fontScale;
-  final bool isTablet;
-  const _QuickActionsBlock({required this.fontScale, required this.isTablet});
-  @override
-  Widget build(BuildContext context) {
-    return isTablet
-      ? Row(children: [
-          Expanded(child: _QuickActionCard("Rodada Rápida", "5 questões • 5 min", "INICIAR", Color(0xFF4B2676), Colors.white, fontScale)),
-          SizedBox(width: 16 * fontScale),
-          Expanded(child: _QuickActionCard("Banco de Questões", "Escolha suas questões", "EXPLORAR", Color(0xFFDED6F6), Color(0xFF4B2676), fontScale)),
-          SizedBox(width: 16 * fontScale),
-          Expanded(child: _QuickActionCard("Trilha de matemática", "Veja questões em matemática", "FAZER", Color(0xFFFDC250), Color(0xFF4B2676), fontScale)),
-        ])
-      : Column(
-          children: [
-            Row(
-              children: [
-                Expanded(child: _QuickActionCard("Rodada Rápida", "5 questões • 5 min", "INICIAR", Color(0xFF4B2676), Colors.white, fontScale)),
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(child: _QuickActionCard("Banco de Questões", "Escolha suas questões", "EXPLORAR", Color(0xFFDED6F6), Color(0xFF4B2676), fontScale)),
-                SizedBox(width: 10),
-                Expanded(child: _QuickActionCard("Trilha de matemática", "Veja questões em matemática", "FAZER", Color(0xFFFDC250), Color(0xFF4B2676), fontScale)),
-              ],
-            ),
-          ],
-        );
-  }
-}
+  // ---------- Widgets auxiliares (componentes do layout) ----------
 
-class _QuickActionCard extends StatelessWidget {
-  final String title, subtitle, action;
-  final Color bgColor, textColor;
-  final double fontScale;
-  const _QuickActionCard(this.title, this.subtitle, this.action, this.bgColor, this.textColor, this.fontScale);
-  @override
-  Widget build(BuildContext context) {
+  Widget _smallStatCard(String label, String value, Color color) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 15 * fontScale, horizontal: 13 * fontScale),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(13 * fontScale),
+        color: color.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(12),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(Icons.play_circle_fill_rounded, color: textColor, size: 29 * fontScale),
-          SizedBox(width: 12 * fontScale),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 14 * fontScale, color: textColor)),
-                SizedBox(height: 2),
-                Text(subtitle, style: GoogleFonts.poppins(fontSize: 11 * fontScale, color: textColor.withOpacity(0.7))),
-              ],
-            ),
-          ),
-          SizedBox(width: 6 * fontScale),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 13 * fontScale, vertical: 6 * fontScale),
-            decoration: BoxDecoration(
-              color: textColor == Colors.white ? Color(0xFF51B5A6) : Colors.white,
-              borderRadius: BorderRadius.circular(9 * fontScale),
-            ),
-            child: Text(action, style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 11 * fontScale, color: textColor == Colors.white ? Colors.white : textColor)),
-          ),
-        ],
-      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(label, style: GoogleFonts.poppins(fontSize: 12, color: Colors.black87)),
+        const SizedBox(height: 6),
+        Text(value, style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w700, color: color)),
+      ]),
     );
   }
-}
 
-class _StatsBlock extends StatelessWidget {
-  final double fontScale;
-  final bool isTablet;
-  const _StatsBlock({required this.fontScale, required this.isTablet});
-  @override
-  Widget build(BuildContext context) {
-    return isTablet
-      ? Row(
-          children: [
-            Expanded(child: _StatsCard(icon: Icons.article_outlined, title: 'Questões', value: '24', fontScale: fontScale)),
-            SizedBox(width: 18 * fontScale),
-            Expanded(child: _StatsCard(icon: Icons.timer, title: 'Tempo', value: '24m', fontScale: fontScale)),
-            SizedBox(width: 18 * fontScale),
-            Expanded(child: _StatsCard(icon: Icons.notes, title: 'Apontes', value: '10', fontScale: fontScale)),
-            SizedBox(width: 18 * fontScale),
-            Expanded(child: _StatsCard(icon: Icons.timeline_sharp, title: 'Sequência', value: 'Tribo', fontScale: fontScale)),
-          ],
-        )
-      : Row(
-          children: [
-            Expanded(child: _StatsCard(icon: Icons.article_outlined, title: 'Questões', value: '24', fontScale: fontScale)),
-            SizedBox(width: 8),
-            Expanded(child: _StatsCard(icon: Icons.timer, title: 'Tempo', value: '24m', fontScale: fontScale)),
-            SizedBox(width: 8),
-            Expanded(child: _StatsCard(icon: Icons.notes, title: 'Apontes', value: '10', fontScale: fontScale)),
-            SizedBox(width: 8),
-            Expanded(child: _StatsCard(icon: Icons.timeline_sharp, title: 'Sequência', value: 'Tribo', fontScale: fontScale)),
-          ],
-        );
-  }
-}
-
-class _StatsCard extends StatelessWidget {
-  final IconData icon;
-  final String title, value;
-  final double fontScale;
-  const _StatsCard({required this.icon, required this.title, required this.value, required this.fontScale});
-  @override
-  Widget build(BuildContext context) {
+  Widget _mapaZeradoView() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 13 * fontScale, horizontal: 6 * fontScale),
-      decoration: BoxDecoration(
-        color: Color(0xFFF3F2F7),
-        borderRadius: BorderRadius.circular(13 * fontScale),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: Color(0xFFB2A2BF), size: 22 * fontScale),
-          Text(value, style: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 14 * fontScale, color: Color(0xFF4B2676))),
-          SizedBox(height: 3),
-          Text(title, style: GoogleFonts.poppins(fontSize: 11 * fontScale, color: Color(0xFFA498B5))),
-        ],
-      ),
-    );
-  }
-}
-
-class _SideNavigation extends StatelessWidget {
-  final double fontScale;
-  const _SideNavigation({required this.fontScale});
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _SideNavCircle(icon: Icons.play_arrow_rounded, active: true, fontScale: fontScale),
-        _SideNavCircle(icon: Icons.menu_book_rounded, fontScale: fontScale),
-        _SideNavCircle(icon: Icons.note_alt, fontScale: fontScale),
-        _SideNavCircle(icon: Icons.insert_chart_outlined, fontScale: fontScale),
-        _SideNavCircle(icon: Icons.settings, fontScale: fontScale),
-      ],
-    );
-  }
-}
-class _SideNavCircle extends StatelessWidget {
-  final IconData icon;
-  final bool active;
-  final double fontScale;
-  const _SideNavCircle({required this.icon, this.active=false, required this.fontScale});
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 7 * fontScale),
-      child: CircleAvatar(
-        backgroundColor: active ? Color(0xFF4B2676) : Color(0xFFF3F2F7),
-        radius: 21 * fontScale,
-        child: Icon(icon, color: active ? Colors.white : Color(0xFFB2A2BF), size: 20 * fontScale),
-      ),
-    );
-  }
-}
-class _BottomBar extends StatelessWidget {
-  final double fontScale;
-  final bool isTablet;
-  const _BottomBar({required this.fontScale, required this.isTablet});
-  @override
-  Widget build(BuildContext context) {
-    final padding = isTablet ? EdgeInsets.symmetric(horizontal: 40 * fontScale, vertical: 11 * fontScale) : EdgeInsets.symmetric(horizontal: 12, vertical: 6);
-    return Container(
-      margin: EdgeInsets.only(left: isTablet ? 45 * fontScale : 22, right: isTablet ? 45 * fontScale : 22, bottom: 8 * fontScale),
-      padding: padding,
+      height: 160,
+      width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(isTablet ? 27 * fontScale : 17),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 18 * fontScale, offset: Offset(0, 4)),
-        ],
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFFEDEDED)),
+      ),
+      child: Center(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          const Icon(Icons.location_on_outlined, size: 36, color: Colors.grey),
+          const SizedBox(height: 8),
+          Text('Nenhum progresso ainda', style: GoogleFonts.poppins(color: Colors.black54)),
+          const SizedBox(height: 6),
+          Text('Comece sua primeira aula para preencher seu mapa',
+              style: GoogleFonts.poppins(color: Colors.black38, fontSize: 12), textAlign: TextAlign.center),
+        ]),
+      ),
+    );
+  }
+
+  Widget _mapaNaoZeradoView() {
+    return Column(
+      children: List.generate(3, (i) {
+        return Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color(0xFFECECEC)),
+          ),
+          child: Row(
+            children: [
+              CircleAvatar(backgroundColor: const Color(0xFF6A1B9A), child: Icon(Icons.play_arrow, color: Colors.white)),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('Matemática ${i + 1}', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
+                  Text('10 questões', style: GoogleFonts.poppins(color: Colors.black54, fontSize: 12)),
+                ]),
+              ),
+              TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                  backgroundColor: const Color(0xFF6A1B9A),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+                child: Text('Continuar', style: GoogleFonts.poppins(color: Colors.white)),
+              )
+            ],
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget _actionCard({
+    required String title,
+    required String subtitle,
+    required Color bg,
+    required Color borderColor,
+    required String buttonLabel,
+    required IconData icon,
+    required Color buttonBg,
+    required Color buttonTextColor,
+    Color? textColor,
+  }) {
+    final bool isPrimaryBg = bg == const Color(0xFF6A1B9A);
+    final Color actualTextColor = textColor ?? (isPrimaryBg ? Colors.white : Colors.black);
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: borderColor.withOpacity(0.12)),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Icon(Icons.home_filled, color: Color(0xFF4B2676), size: 29 * fontScale),
-          Icon(Icons.bolt, color: Color(0xFFD1C1EC), size: 26 * fontScale),
-          Icon(Icons.pie_chart_rounded, color: Color(0xFFD1C1EC), size: 26 * fontScale),
-          Icon(Icons.forum_outlined, color: Color(0xFFD1C1EC), size: 26 * fontScale),
+          Icon(icon, color: actualTextColor),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(title, style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: actualTextColor)),
+              const SizedBox(height: 6),
+              Text(subtitle, style: GoogleFonts.poppins(fontSize: 12, color: actualTextColor.withOpacity(0.85))),
+            ]),
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: buttonBg,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              elevation: 0,
+            ),
+            child: Text(buttonLabel, style: GoogleFonts.poppins(color: buttonTextColor, fontWeight: FontWeight.w600)),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _statCard(String title, String value, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFECECEC)),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: const Color(0xFF6A1B9A)),
+          const SizedBox(height: 8),
+          Text(value, style: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 16)),
+          const SizedBox(height: 6),
+          Text(title, style: GoogleFonts.poppins(color: Colors.black54, fontSize: 12)),
         ],
       ),
     );

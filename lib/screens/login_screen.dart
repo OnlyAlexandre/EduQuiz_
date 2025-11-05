@@ -159,7 +159,9 @@ class LoginPage extends StatelessWidget {
                   const SizedBox(height: 18),
                   Center(
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/esqueci-senha');
+                      },
                       child: Text(
                         "Esqueceu a senha?",
                         style: GoogleFonts.poppins(

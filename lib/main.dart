@@ -5,11 +5,14 @@ import 'package:provider/provider.dart';
 // Import das telas
 import 'screens/curso_info_screen.dart';
 import 'screens/signup_screen.dart';
-import 'screens/onboarding_screen.dart';
 import 'screens/login_screen.dart' show LoginPage;
-import 'screens/home_screen.dart' show HomePage;
+import 'screens/home_screen.dart';
 import 'screens/quiz_screen.dart';
 import 'screens/result_screen.dart';
+import 'screens/esqueceu_senha_screen.dart';
+import 'screens/confirmacao_email_screen.dart';
+import 'screens/codigo_verificacao_screen.dart';
+import 'screens/nova_senha_screen.dart';
 import 'providers/quiz_provider.dart';
 
 void main() {
@@ -52,15 +55,18 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: '/onboarding',
+      initialRoute: '/home',
       routes: {
-        '/onboarding': (context) => OnboardingScreen(),
+        '/home': (context) => const HomeScreen(),  // ou fale, dependendo do e (context) => const OnboardingScreen(),
         '/login': (context) => const LoginPage(),
-        '/signup': (context) => const SignupPage(),       
-        '/home': (context) => const HomePage(),
-        '/quiz': (context) => QuizScreen(),
-        '/result': (context) => ResultScreen(),
+        '/signup': (context) => const SignupPage(),
+        '/quiz': (context) => const QuizScreen(),
+        '/result': (context) => const ResultScreen(),
         '/curso-info': (context) => const CursoInfoScreen(),
+        '/esqueci-senha': (context) => const EsqueceuSenhaScreen(),
+        '/confirmacao-email': (context) => const ConfirmacaoEmailScreen(),
+        '/codigo-verificacao': (context) => const CodigoVerificacaoScreen(),
+        '/nova-senha': (context) => const NovaSenhaScreen(),
       },
     );
   }

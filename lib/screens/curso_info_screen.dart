@@ -35,7 +35,7 @@ class _CursoInfoScreenState extends State<CursoInfoScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF6A1B9A),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -49,9 +49,9 @@ class _CursoInfoScreenState extends State<CursoInfoScreen> {
               Text(
                 "EDUQUIZ",
                 style: GoogleFonts.poppins(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF6A1B9A),
                 ),
               ),
               const SizedBox(height: 16),
@@ -62,7 +62,7 @@ class _CursoInfoScreenState extends State<CursoInfoScreen> {
                 style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
-                  color: Colors.white,
+                  color: Colors.black87,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -75,20 +75,20 @@ class _CursoInfoScreenState extends State<CursoInfoScreen> {
                   "Qual vestibular você deseja prestar?",
                   style: GoogleFonts.poppins(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: Colors.black87,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
-                dropdownColor: const Color(0xFF6A1B9A),
+                dropdownColor: Colors.white,
                 value: _instituicaoSelecionada,
                 hint: Text(
                   "Selecione aqui ↓",
                   style: GoogleFonts.poppins(color: Colors.grey[600]),
                 ),
-                style: GoogleFonts.poppins(color: Colors.white),
+                style: GoogleFonts.poppins(color: Colors.black87),
                 items: vestibulares.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -127,23 +127,24 @@ class _CursoInfoScreenState extends State<CursoInfoScreen> {
                   "Qual curso você deseja fazer?",
                   style: GoogleFonts.poppins(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: Colors.black87,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
+                dropdownColor: Colors.white,
                 value: _cursoSelecionado,
                 hint: Text(
                   "Selecione aqui ↓",
                   style: GoogleFonts.poppins(color: Colors.grey[600]),
                 ),
-                style: GoogleFonts.poppins(color: Colors.white),
+                style: GoogleFonts.poppins(color: Colors.black),
                 items: cursos.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value, style: GoogleFonts.poppins()),
+                    child: Text(value, style: GoogleFonts.poppins(color: Colors.black)),
                   );
                 }).toList(),
                 onChanged: (newValue) {
