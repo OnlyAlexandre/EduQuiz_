@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 // Import das telas
 import 'screens/curso_info_screen.dart';
 import 'screens/signup_screen.dart';
@@ -30,7 +33,8 @@ import 'screens/acessibilidade_screen.dart';
 import 'screens/missao_diaria_screen.dart';
 import 'providers/quiz_provider.dart';
 
-void main() {
+void main() async{
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
   runApp(
     MultiProvider(
       providers: [

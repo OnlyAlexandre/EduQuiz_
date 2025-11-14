@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "958501398871",
+    "project_id": "eduquizz-c71ac",
+    "storage_bucket": "eduquizz-c71ac.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958501398871:android:d143f0d094eb307506f612",
+        "android_client_info": {
+          "package_name": "com.example.meu_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "958501398871-2bgdtrddmns6035ql0h6k0h8u64o8bcm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCglbBC-w1yFN49m2ytdPo8SirZbhy7c6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "958501398871-2bgdtrddmns6035ql0h6k0h8u64o8bcm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "958501398871-mblsa6td18a5qa0grejr2ng5iq3385f5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.meuApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
