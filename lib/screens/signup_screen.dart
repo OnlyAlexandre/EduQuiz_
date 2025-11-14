@@ -192,7 +192,7 @@ Future<UserCredential> signInWithFacebook() async {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () async{await createUserWithEmailAndPassword();},
                   child: Text(
                     "Cadastrar-se",
                     style: GoogleFonts.poppins(
@@ -225,7 +225,7 @@ Future<UserCredential> signInWithFacebook() async {
                     ),
                     child: IconButton(
                       icon: Icon(Icons.camera_alt_outlined, color: Color(0xFF6A1B9A), size: iconSize),
-                      onPressed: () {},
+                      onPressed: () {if(kIsWeb){signInWithGoogle();}else{signInWithGoogleMobile();}},
                     ),
                   ),
                   SizedBox(width: isTablet ? 34 : 20),
@@ -247,7 +247,7 @@ Future<UserCredential> signInWithFacebook() async {
                     ),
                     child: IconButton(
                       icon: Icon(Icons.facebook, color: Color(0xFF6A1B9A), size: iconSize),
-                      onPressed: () {},
+                      onPressed: () {if(kIsWeb){signInWithFacebook();}},
                     ),
                   ),
                 ],
