@@ -1,6 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io' show Platform;
 
+class SenhaInvalidaException implements Exception {
+  final String mensagem;
+  SenhaInvalidaException(this.mensagem);
+
+  @override
+  String toString() => 'SenhaInvalidaException: $mensagem';
+}
 class SignupPage extends StatelessWidget {
   const SignupPage({super.key});
 
@@ -18,6 +29,51 @@ class SignupPage extends StatelessWidget {
     final buttonFont = isTablet ? 20.0 : 16.0;
     final inputFont = isTablet ? 18.0 : 14.0;
     final iconSize = isTablet ? 32.0 : 24.0;
+    final  nomeController = TextEditingController();
+    final  emailController = TextEditingController();
+    final  senhaController = TextEditingController();
+    final senhaConfirmController = TextEditingController();
+
+    Future <void> createUserWithEmailAndPassword() async{
+    try{
+      if(senhaController.text != senhaConfirmController.text ) throw SenhaInvalidaException('As senhas não coincidem');
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text.trim(), password: senhaController.text.trim());
+      } on FirebaseAuthException catch(e) {
+        print(e.message);
+      } on SenhaInvalidaException catch(e){
+        print(e.mensagem);
+      }
+  }
+
+
+  Future<UserCredential> signInWithGoogle() async{
+    GoogleAuthProvider googleProvider = GoogleAuthProvider();
+
+    googleProvider.addScope('https://www.googleapis.com/auth/userinfo.email');
+    googleProvider.addScope('https://www.googleapis.com/auth/userinfo.profile');
+    googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
+    return await FirebaseAuth.instance.signInWithPopup(googleProvider);
+  }
+
+  Future<UserCredential> signInWithGoogleMobile() async{
+
+    final GoogleSignInAccount? googleUser = await GoogleSignIn.instance.authenticate();
+    if (googleUser == null) {throw Exception('Login cancelado pelo usuário');}
+    final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+    final credential = GoogleAuthProvider.credential(idToken: googleAuth.idToken);
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+Future<UserCredential> signInWithFacebook() async {
+
+  FacebookAuthProvider facebookProvider = FacebookAuthProvider();
+
+  facebookProvider.addScope('email');
+  facebookProvider.setCustomParameters({'display': 'popup',});
+
+  return await FirebaseAuth.instance.signInWithPopup(facebookProvider);
+
+}
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -56,6 +112,7 @@ class SignupPage extends StatelessWidget {
               const SizedBox(height: 38),
               // Campo Nome
               TextField(
+                controller: nomeController,
                 style: GoogleFonts.poppins(fontSize: inputFont),
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.person_outline, color: Colors.black54, size: iconSize),
@@ -69,6 +126,7 @@ class SignupPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               TextField(
+                controller: emailController,
                 style: GoogleFonts.poppins(fontSize: inputFont),
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.email_outlined, color: Colors.black54, size: iconSize),
@@ -82,6 +140,7 @@ class SignupPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               TextField(
+                controller: senhaController,
                 obscureText: true,
                 style: GoogleFonts.poppins(fontSize: inputFont),
                 decoration: InputDecoration(
@@ -96,6 +155,7 @@ class SignupPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               TextField(
+                controller: senhaConfirmController,
                 obscureText: true,
                 style: GoogleFonts.poppins(fontSize: inputFont),
                 decoration: InputDecoration(
