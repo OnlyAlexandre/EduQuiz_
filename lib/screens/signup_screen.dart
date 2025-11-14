@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:io' show Platform;
+
 
 class SenhaInvalidaException implements Exception {
   final String mensagem;
@@ -67,13 +68,18 @@ class SignupPage extends StatelessWidget {
 Future<UserCredential> signInWithFacebook() async {
 
   FacebookAuthProvider facebookProvider = FacebookAuthProvider();
-
   facebookProvider.addScope('email');
   facebookProvider.setCustomParameters({'display': 'popup',});
-
   return await FirebaseAuth.instance.signInWithPopup(facebookProvider);
-
 }
+
+Future<UserCredential> signInWithFacebookMobile() async {
+  
+  final LoginResult loginResult = await FacebookAuth.instance.login();
+  final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
+  return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+}
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -234,7 +240,7 @@ Future<UserCredential> signInWithFacebook() async {
                     ),
                     child: IconButton(
                       icon: Icon(Icons.facebook, color: Color(0xFF6A1B9A), size: iconSize),
-                      onPressed: () {if(kIsWeb){signInWithFacebook();}},
+                      onPressed: () {if(kIsWeb){signInWithFacebook();}else{signInWithFacebookMobile();}},
                     ),
                   ),
                 ],
