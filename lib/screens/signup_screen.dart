@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:meu_app/services/user_service.dart';
 
 
 class SenhaInvalidaException implements Exception {
@@ -38,7 +39,8 @@ class SignupPage extends StatelessWidget {
     Future <void> createUserWithEmailAndPassword() async{
     try{
       if(senhaController.text != senhaConfirmController.text ) throw SenhaInvalidaException('As senhas não coincidem');
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text.trim(), password: senhaController.text.trim());
+      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text.trim(), password: senhaController.text.trim());
+      await UserService.syncUserAfterAuth(userCredential.user!, nomeController.text);
       } on FirebaseAuthException catch(e) {
         print(e.message);
       } on SenhaInvalidaException catch(e){
@@ -78,6 +80,15 @@ Future<UserCredential> signInWithFacebookMobile() async {
   final LoginResult loginResult = await FacebookAuth.instance.login();
   final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
   return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+}
+
+Future<UserCredential> signInWithApple() async {
+  final appleProvider = AppleAuthProvider();
+  if (kIsWeb) {
+    return await FirebaseAuth.instance.signInWithPopup(appleProvider);
+  } else {
+    return await FirebaseAuth.instance.signInWithProvider(appleProvider);
+  }
 }
 
     return Scaffold(
@@ -229,7 +240,7 @@ Future<UserCredential> signInWithFacebookMobile() async {
                     ),
                     child: IconButton(
                       icon: Icon(Icons.apple, color: Color(0xFF6A1B9A), size: iconSize),
-                      onPressed: () {},
+                      onPressed: () {signInWithApple();},
                     ),
                   ),
                   SizedBox(width: isTablet ? 34 : 20),

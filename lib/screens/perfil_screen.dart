@@ -1,10 +1,13 @@
 // lib/screens/perfil_screen.dart
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:meu_app/services/user_service.dart';
+import 'package:meu_app/services/user_state.dart';
 
 class PerfilScreen extends StatelessWidget {
   const PerfilScreen({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +39,7 @@ class PerfilScreen extends StatelessWidget {
   }
 
   Widget _buildProfileHeader() {
+         final user = UserState.currentUser;
     return Column(
       children: [
         const CircleAvatar(
@@ -45,15 +49,15 @@ class PerfilScreen extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          'João Silva',
+          ' ${user?.name}',
           style: GoogleFonts.poppins(
             fontSize: 22,
             fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(height: 4),
-        Text(
-          'joao@exemplo.com',
+        Text( 
+          '${user?.email}',
           style: GoogleFonts.poppins(
             color: Colors.grey[600],
             fontSize: 14,
