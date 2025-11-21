@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:meu_app/services/user_service.dart';
+import 'package:meu_app/services/user_state.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -17,6 +20,22 @@ class LoginPage extends StatelessWidget {
     final titleFont = isTablet ? 38.0 : 24.0;
     final buttonFont = isTablet ? 22.0 : 18.0;
     final labelFont = isTablet ? 16.0 : 14.0;
+    final emailController = TextEditingController();
+    final senhaController = TextEditingController();
+
+    Future<void> userWithEmailAndPassword() async {
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text.trim(),password: senhaController.text.trim(),);
+            final userData = await UserService.getUsuario();
+            UserState.currentUser = userData;
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          print('No user found for that email.');
+        } else if (e.code == 'wrong-password') {
+          print('Wrong password provided for that user.');
+        }
+      }
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xFF6A1B9A), // Roxo de fundo
@@ -94,6 +113,7 @@ class LoginPage extends StatelessWidget {
 
                   // Campo de E-mail
                   TextField(
+                    controller: emailController,
                     style: GoogleFonts.poppins(fontSize: fieldFont),
                     decoration: InputDecoration(
                       labelText: "E-mail",
@@ -113,6 +133,7 @@ class LoginPage extends StatelessWidget {
 
                   // Campo de Senha
                   TextField(
+                    controller: senhaController,
                     obscureText: true,
                     style: GoogleFonts.poppins(fontSize: fieldFont),
                     decoration: InputDecoration(
@@ -144,7 +165,7 @@ class LoginPage extends StatelessWidget {
                         elevation: 4,
                       ),
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/curso-info');
+                        userWithEmailAndPassword();
                       },
                       child: Text(
                         "Entrar",

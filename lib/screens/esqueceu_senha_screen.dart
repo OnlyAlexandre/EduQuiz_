@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EsqueceuSenhaScreen extends StatelessWidget {
   const EsqueceuSenhaScreen({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
+    final  emailController = TextEditingController();
     final roxo = const Color(0xFF6A1B9A);
 
     return Scaffold(
@@ -43,6 +45,7 @@ class EsqueceuSenhaScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             TextField(
+              controller: emailController,
               decoration: InputDecoration(
                 labelText: 'Digite seu e-mail',
                 labelStyle: GoogleFonts.poppins(color: Colors.grey[600]),
@@ -60,7 +63,8 @@ class EsqueceuSenhaScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              onPressed: () {
+              onPressed: () async{
+                await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text.trim());
                 Navigator.pushNamed(context, '/confirmacaoEmail');
               },
               child: Text(

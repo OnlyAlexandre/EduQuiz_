@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:meu_app/screens/perfil_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -53,6 +55,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Quiz App',
       debugShowCheckedModeBanner: false,
+      home: const AuthGate(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
         textTheme: GoogleFonts.poppinsTextTheme(
@@ -104,4 +107,21 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+}
+
+class AuthGate extends StatelessWidget {
+    const AuthGate({super.key});
+
+    @override
+    Widget build(BuildContext context){
+        return StreamBuilder<User?>(stream: FirebaseAuth.instance.userChanges(),
+        builder: (context, snapshot) {
+          if(snapshot.hasData){
+            return const HomeScreen();
+          }else{
+            return const LoginPage();
+          }
+        },
+      );
+    }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:meu_app/services/user_service.dart';
+import 'package:meu_app/services/user_state.dart';
 
 // Cores definidas como constantes no escopo do arquivo
 // Cores definidas como constantes no escopo do arquivo
@@ -9,7 +11,7 @@ const Color _bgColor = Color(0xFFF8F9FA);
 
 class PerfilScreen extends StatelessWidget {
   const PerfilScreen({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
 

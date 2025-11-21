@@ -4,12 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import '../utils/responsive.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String nome;
+
   final bool initialZerado; // passe true/false aqui na inicialização
 
   const HomeScreen({
     super.key,
-    this.nome = 'João',
     this.initialZerado = true,
   });
 
@@ -19,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late bool isZerado;
+  final user = UserState.currentUser;
 
   @override
   void initState() {
@@ -26,9 +26,40 @@ class _HomeScreenState extends State<HomeScreen> {
     isZerado = widget.initialZerado;
     // Aqui você pode chamar sua API e alterar isZerado quando receber resposta.
   }
+  
+  Future<void> _loadUser() async {
+    if (UserState.currentUser == null) {
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+      if (uid == null) return;
+
+      UserState.currentUser = await UserService.getUsuario();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _loadUser(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final user = UserState.currentUser;
+
+        if (user == null) {
+          return const Scaffold(
+            body: Center(child: Text("Erro ao carregar usuário")),
+          );
+        }
+
+        return _buildHome(user);
+      },
+    );
+  }
+  Widget _buildHome(UserService user) {
     // cores centrais do projeto
     const Color primary = Color(0xFF6A1B9A);
     const Color accent = Color(0xFFFFB300);
@@ -119,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Olá, ${widget.nome} 👋',
+                          'Olá, ${user.name} 👋',
                           style: GoogleFonts.poppins(
                             color: Colors.white,
                             fontSize: greetingFont,
