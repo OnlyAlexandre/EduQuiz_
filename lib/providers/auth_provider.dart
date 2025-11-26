@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 class AuthProvider with ChangeNotifier {
-  bool _isLoading = false;
+  final bool _isLoading = false;
   String? _errorMessage;
 
   bool get isLoading => _isLoading;

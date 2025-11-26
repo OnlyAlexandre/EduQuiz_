@@ -82,6 +82,20 @@ class SignupPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               TextField(
+                keyboardType: TextInputType.phone,
+                style: GoogleFonts.poppins(fontSize: inputFont),
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.phone_outlined, color: Colors.black54, size: iconSize),
+                  hintText: "Digite seu telefone",
+                  hintStyle: GoogleFonts.poppins(color: Colors.black45),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: isTablet ? 20 : 14),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
                 obscureText: true,
                 style: GoogleFonts.poppins(fontSize: inputFont),
                 decoration: InputDecoration(

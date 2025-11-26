@@ -8,7 +8,6 @@ class ResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final w = size.width;
-    final h = size.height;
     final isTablet = w > 600;
     final pad = isTablet ? w * 0.13 : 16.0;
     final titleFont = isTablet ? 38.0 : 28.0;

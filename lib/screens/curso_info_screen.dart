@@ -83,7 +83,7 @@ class _CursoInfoScreenState extends State<CursoInfoScreen> {
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 dropdownColor: Colors.white,
-                value: _instituicaoSelecionada,
+                initialValue: _instituicaoSelecionada,
                 hint: Text(
                   "Selecione aqui ↓",
                   style: GoogleFonts.poppins(color: Colors.grey[600]),
@@ -135,7 +135,7 @@ class _CursoInfoScreenState extends State<CursoInfoScreen> {
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 dropdownColor: Colors.white,
-                value: _cursoSelecionado,
+                initialValue: 'Exemplo de pergunta 1',
                 hint: Text(
                   "Selecione aqui ↓",
                   style: GoogleFonts.poppins(color: Colors.grey[600]),

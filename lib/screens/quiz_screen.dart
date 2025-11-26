@@ -8,7 +8,6 @@ class QuizScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final w = size.width;
-    final h = size.height;
     final isTablet = w > 600;
     final pad = isTablet ? w * 0.08 : 16.0;
     final questionFont = isTablet ? 32.0 : 22.0;
