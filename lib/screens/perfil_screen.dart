@@ -1,3 +1,5 @@
+// lib/screens/perfil_screen.dart
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:meu_app/services/user_service.dart';
@@ -327,6 +329,54 @@ class PerfilScreen extends StatelessWidget {
   }
 
   // ---- COMPONENTES AUXILIARES ----
+  Widget _buildProfileHeader() {
+         final user = UserState.currentUser;
+    return Column(
+      children: [
+        const CircleAvatar(
+          radius: 50,
+          backgroundColor: Color(0xFFF0E6F6),
+          child: Icon(Icons.person, size: 50, color: Color(0xFF6A1B9A)),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          ' ${user?.name}',
+          style: GoogleFonts.poppins(
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text( 
+          '${user?.email}',
+          style: GoogleFonts.poppins(
+            color: Colors.grey[600],
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: () {
+            // Navegar para edição de perfil
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF6A1B9A),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          ),
+          child: Text(
+            'Editar Perfil',
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget _tag(String text, Color bg, Color textColor) {
     return Container(

@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../utils/responsive.dart';
+import 'package:meu_app/services/user_service.dart';
+import 'package:meu_app/services/user_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -102,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(right: 12),
             child: InkWell(
               onTap: () {
-                Navigator.pushNamed(context, '/perfil');
+                Navigator.pushNamed(context,'/perfil');
               },
               child: CircleAvatar(
                 radius: avatarRadius,

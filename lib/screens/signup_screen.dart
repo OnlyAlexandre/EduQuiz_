@@ -171,6 +171,7 @@ Future<UserCredential> signInWithApple() async {
               ),
               const SizedBox(height: 16),
               TextField(
+                controller: senhaController,
                 obscureText: true,
                 style: GoogleFonts.poppins(fontSize: inputFont),
                 decoration: InputDecoration(
