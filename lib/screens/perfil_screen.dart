@@ -1,7 +1,7 @@
 // lib/screens/perfil_screen.dart
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:meu_app/services/user_state.dart';
 import 'package:meu_app/services/user_service.dart';
 import 'package:meu_app/services/user_state.dart';
 
@@ -16,7 +16,7 @@ class PerfilScreen extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-  final user = UserState.currentUser;
+
     return Scaffold(
       backgroundColor: _bgColor,
       appBar: AppBar(
@@ -57,28 +57,22 @@ class PerfilScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         radius: 36,
-                        backgroundImage: user!.photoURL != null ? NetworkImage(user.photoURL!) : null,
-                        backgroundColor: _primaryColor.withOpacity(0.1),
-                        child: user.photoURL == null
-                            ? Icon(Icons.person, size: 36, color: _primaryColor)
-                            : null,
+                        backgroundImage: AssetImage('assets/images/user.jpg'), // substitua pela sua imagem
                       ),
                       const SizedBox(width: 16),
-
-                      
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(user?.name ?? 'Nome não disponível',
+                            Text('João Silva',
                                 style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 18,
                                 )),
                             Text(
-                              user?.email ?? 'E-mail não disponível',
+                              'joao.silva@gmail.com',
                               style: GoogleFonts.poppins(
                                   color: Colors.black54, fontSize: 13),
                             ),
@@ -110,8 +104,8 @@ class PerfilScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _followStat(Icons.people_alt_outlined, 'Seguidores', user?.totalSeguidores.toString() ?? '0'),
-                      _followStat(Icons.person_add_alt_1_outlined, 'Seguindo', user?.totalSeguindo.toString() ?? '0'),
+                      _followStat(Icons.people_alt_outlined, 'Seguidores', '32'),
+                      _followStat(Icons.person_add_alt_1_outlined, 'Seguindo', '52'),
                     ],
                   ),
                 ],

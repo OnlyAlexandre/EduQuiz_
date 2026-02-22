@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../services/password_reset_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EsqueceuSenhaScreen extends StatelessWidget {
   const EsqueceuSenhaScreen({super.key});
@@ -64,9 +64,9 @@ class EsqueceuSenhaScreen extends StatelessWidget {
                 ),
               ),
               onPressed: () async{
-                final success = await PasswordResetService.sendResetCode(emailController.text.trim());
-                if(success){Navigator.pushNamed(context, '/confirmacao-email');}
-    },
+                await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text.trim());
+                Navigator.pushNamed(context, '/confirmacaoEmail');
+              },
               child: Text(
                 'Enviar',
                 style: GoogleFonts.poppins(
