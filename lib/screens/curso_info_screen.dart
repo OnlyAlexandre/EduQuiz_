@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:meu_app/services/user_service.dart';
 
 class CursoInfoScreen extends StatefulWidget {
   const CursoInfoScreen({super.key});
@@ -184,8 +185,8 @@ class _CursoInfoScreenState extends State<CursoInfoScreen> {
                     ),
                   ),
                   onPressed: _instituicaoSelecionada != null && _cursoSelecionado != null
-                      ? () {
-                          // Navegar para a próxima tela
+                      ? () async{
+                            await UserService.updateCursoEVestibular( _cursoSelecionado!,_instituicaoSelecionada!);
                           Navigator.pushReplacementNamed(context, '/home');
                         }
                       : null,
