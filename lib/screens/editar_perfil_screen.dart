@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:meu_app/services/user_service.dart';
+import 'package:meu_app/services/user_state.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 
 class EditarPerfilScreen extends StatefulWidget {
   const EditarPerfilScreen({super.key});
@@ -9,21 +15,17 @@ class EditarPerfilScreen extends StatefulWidget {
 }
 
 class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
+
   final _formKey = GlobalKey<FormState>();
-  final _nomeController = TextEditingController(text: 'João Silva');
-  final _emailController = TextEditingController(text: 'joao.silva@gmail.com');
-  final _telefoneController = TextEditingController(text: '(11) 98765-4321');
-
-  @override
-  void dispose() {
-    _nomeController.dispose();
-    _emailController.dispose();
-    _telefoneController.dispose();
-    super.dispose();
-  }
-
+ 
   @override
   Widget build(BuildContext context) {
+  final user = UserState.currentUser;
+  final nomeController = TextEditingController(text: user?.name ?? '');
+  final emailController = TextEditingController(text: user?.email ?? '');
+  final telefoneController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
+
     const Color primaryColor = Color(0xFF6A1B9A);
 
     return Scaffold(
@@ -62,6 +64,16 @@ class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
                   Positioned(
                     bottom: 0,
                     right: 0,
+                    child: GestureDetector(
+                    onTap: () async {
+                      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+                      if (image != null && user != null) {
+                        print('Imagem selecionada: ${image.path}');
+                        await UserService.updateImagemUsuario(user.uid, image);
+                        setState(() {});
+                      }
+                    },
+
                     child: Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
@@ -72,13 +84,15 @@ class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
                       child: const Icon(Icons.camera_alt, size: 16, color: Colors.white),
                     ),
                   ),
+                ),
                 ],
               ),
+            
               const SizedBox(height: 24),
 
               // Nome completo
               TextFormField(
-                controller: _nomeController,
+                controller: nomeController,
                 decoration: InputDecoration(
                   labelText: 'Nome completo',
                   labelStyle: GoogleFonts.poppins(),
@@ -103,7 +117,7 @@ class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
 
               // E-mail
               TextFormField(
-                controller: _emailController,
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: 'E-mail',
@@ -129,7 +143,7 @@ class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
 
               // Telefone
               TextFormField(
-                controller: _telefoneController,
+                controller: telefoneController,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   labelText: 'Telefone',
@@ -162,8 +176,10 @@ class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Perfil atualizado com sucesso!')),
                       );
+                      UserService.updateEmailNomeUsuario(emailController.text,nomeController.text,);
                       Navigator.pop(context);
                     }
+                  
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,

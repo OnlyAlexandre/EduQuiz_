@@ -6,12 +6,13 @@ import 'package:provider/provider.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 // Import das telas
 import 'screens/curso_info_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/login_screen.dart' show LoginPage;
-import 'screens/perfil_screen.dart';
 import 'screens/notificacoes_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/quiz_screen.dart';
@@ -111,16 +112,40 @@ class MyApp extends StatelessWidget {
 class AuthGate extends StatelessWidget {
     const AuthGate({super.key});
 
-    @override
-    Widget build(BuildContext context){
-        return StreamBuilder<User?>(stream: FirebaseAuth.instance.userChanges(),
-        builder: (context, snapshot) {
-          if(snapshot.hasData){
+     @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.userChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final user = snapshot.data!;
+
+          
+          return FutureBuilder<DocumentSnapshot>(
+            future: FirebaseFirestore.instance.collection('usuarios').doc(user.uid).get(),
+            builder: (context, userDataSnapshot) {
+              if (!userDataSnapshot.hasData) {
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              final data = userDataSnapshot.data!.data() as Map<String, dynamic>?;
+
+              final curso = data?['course'];
+              final vestibular = data?['vestibular'];
+
+             if (curso == null || vestibular == null) {
+             return const CursoInfoScreen(); 
+            }else {
             return const HomeScreen();
-          }else{
-            return const LoginPage();
-          }
-        },
-      );
-    }
+            }
+            },
+          );
+        } else {
+          return const LoginPage();
+        }
+      },
+    );
+  }
 }
